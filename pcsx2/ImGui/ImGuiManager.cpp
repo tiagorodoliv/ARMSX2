@@ -465,6 +465,10 @@ void ImGuiManager::SetStyle()
 	style.ScrollbarRounding = 5.0f;
 
 	style.ScaleAllSizes(s_global_scale);
+
+	// ScaleAllSizes() truncates, so a scale below 1.0 (common on phones) turns the 1x1 minimum
+	// into 0x0, which trips ImGui's "Invalid style setting!" assertion on the next frame.
+	style.WindowMinSize = ImVec2(std::max(style.WindowMinSize.x, 1.0f), std::max(style.WindowMinSize.y, 1.0f));
 }
 
 void ImGuiManager::SetKeyMap()
